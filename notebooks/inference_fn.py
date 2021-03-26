@@ -47,7 +47,9 @@ def gnn_track_finding(
     # dbscan_epsilon, dbscan_minsamples = 0.25, 2 # hyperparameters for DBScan
     # min_hits = 5 # minimum number of hits associated with a particle to define "reconstructable particles"
     # frac_reco_matched, frac_truth_matched = 0.5, 0.5 # parameters for track matching
-
+    hid = np.array(hid)
+    x = np.array(x)
+    cell_data = np.array(cell_data)
 
     data = Data(
             hid=torch.from_numpy(hid),
@@ -73,7 +75,7 @@ def gnn_track_finding(
     # ### From embeddeding space form doublets
 
     # `r_val = 1.7` and `knn_val = 500` are the hyperparameters to be studied.
-    # 
+    #
     # * `r_val` defines the radius of the clustering method
     # * `knn_val` defines the number of maximum neighbors in the embedding space
 
@@ -108,7 +110,7 @@ def gnn_track_finding(
     output = torch.cat(output_list)
     output = torch.sigmoid(output)
 
-    # The filtering network assigns a score to each edge. 
+    # The filtering network assigns a score to each edge.
     # In the end, edges with socres > `filter_cut` are selected to construct graphs.
     # edge_list = e_spatial[:, output.to('cpu') > f_model.hparams['filter_cut']]
     print(f_model.hparams['filter_cut'])
@@ -211,5 +213,3 @@ if __name__ == "__main__":
     print(tracks[0])
     print(tracks[1])
     print("total {:.2} seconds".format(end_time - start_time))
-
-    
